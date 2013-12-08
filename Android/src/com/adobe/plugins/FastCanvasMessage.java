@@ -16,7 +16,7 @@
 
 package com.adobe.plugins;
 
-import org.apache.cordova.api.CallbackContext;
+import org.apache.cordova.CallbackContext;
 
 
 // Simple message system
