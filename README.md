@@ -135,6 +135,15 @@ Additionally, FastCanvas includes the following:
 | FastCanvas.setBackgroundColor(color); | Sets the Canvas background (automatic for first time calling getContext()) |
 | FastContext2D.capture(x, y, w, h, fileName, successCallback,  errorCallback); | Saves the current state of the Canvas as an image |
 
+### Using FastCanvas Efficiently
+
+For best performance, minimize the number of draw calls per fram in the GL layer.
+
+What that means at the JavaScript level is:
+* Use sprite sheets
+* Use as few textures as possible
+* Avoid swapping textures in and out, and preload if possible.
+* Try to batch drawImage calls that use the same texture. It is vastly more efficient to make ten drawImage calls in a row using one texture, and then make ten more using a second texture, than to switch back and forth twenty times.
 
 ### Architecture
 
@@ -156,17 +165,6 @@ FastCanvas does in in the UI thread. A tight stream of rendering commands
 is sent between the threads. This allows some load balancing between
 the threads, separation of the game from the renderer, and (in the
 future) downclocking the render thread.
-
-
-### Using FastCanvas Efficiently
-
-For best performance, minimize the number of draw calls per fram in the GL layer.
-
-What that means at the JavaScript level is:
-* Use sprite sheets
-* Use as few textures as possible
-* Avoid swapping textures in and out, and preload if possible.
-* Try to batch drawImage calls that use the same texture. It is vastly more efficient to make ten drawImage calls in a row using one texture, and then make ten more using a second texture, than to switch back and forth twenty times.
 
 ### Changing the Java interface
 
