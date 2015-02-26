@@ -1,0 +1,13 @@
+{
+  "name": "fastcontext",
+  "version": "0.1.0",
+  "description": "Android Native 2D Context for HTML5 Canvas",
+  "author": "Ali Shakiba",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/piqnt/fastcontext.git"
+  },
+  "homepage": "https://github.com/piqnt/fastcontext",
+  "main": "www/FastContext.js"
+}

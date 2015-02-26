@@ -19,7 +19,7 @@
 #include "Canvas.h"
 #include <GLES/gl.h>
 #include <android/asset_manager.h>
-#include <android\asset_manager_jni.h>
+#include <android/asset_manager_jni.h>
 
 // -----------------------------------------------------------
 // --                     JNI interface                     --

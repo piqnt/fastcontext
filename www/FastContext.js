@@ -1,0 +1,189 @@
+(function(cordova, require) {
+
+  var _exec = cordova && cordova.exec || require && require('cordova/exec');
+
+  function exec(done, fail, action, args) {
+    if (done && typeof done !== 'function') {
+      throw new Error('Invalid "done" callback type: ' + typeof done);
+    }
+    if (fail && typeof fail !== 'function') {
+      throw new Error('Invalid "fail" callback type: ' + typeof fail);
+    }
+
+    if (_exec) {
+      _exec(done, fail, 'FastContext', action, args || []);
+    } else if (typeof fail === 'function') {
+      fail();
+    }
+  }
+
+  var isAvailable = false;
+
+  exec(function(availabe) {
+    isAvailable = availabe;
+    console.log('FastContext isAvailable: ' + isAvailable);
+  }, function() {
+    isAvailable = false;
+    console.log('FastContext isAvailable: ' + isAvailable);
+  }, 'isAvailable');
+
+  HTMLCanvasElement.prototype.getContext = (function(getContext) {
+    return function(type, opts) {
+      var context;
+      if (opts && opts.fastcontext && isAvailable) {
+        context = new FastContext();
+        context.isFast = true;
+      } else {
+        context = getContext.apply(this, arguments)
+        context.isFast = false;
+      }
+      console.log('FastContext getContext: ' + type + ', ' + context.isFast);
+      return context;
+    }
+  })(HTMLCanvasElement.prototype.getContext);
+
+  function FastContext() {
+    this._commands = ""; // TODO: use binary array instead of string
+    this.globalAlpha = this._globalAlpha = 1.0;
+
+    var self = this, timeout = null;
+    this.flush = function(defer) {
+      if (defer) {
+        if (timeout === null) {
+          timeout = setTimeout(self.flush, 1);
+        }
+      } else {
+        if (timeout !== null) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
+        exec(null, null, 'render', [ self._commands ]);
+      }
+    }
+  }
+
+  FastContext.prototype.clear = function() {
+    this.flush(true);
+    this._commands = "";
+  };
+
+  FastContext.prototype.setTransform = function(a, b, c, d, tx, ty) {
+    this.flush(true);
+    this._commands += "t" + (a === 1 ? "1" : a.toFixed(6)) + ","
+        + (b === 0 ? "0" : b.toFixed(6)) + "," + (c === 0 ? "0" : c.toFixed(6))
+        + "," + (d === 1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";";
+  };
+
+  FastContext.prototype.transform = function(a, b, c, d, tx, ty) {
+    this.flush(true);
+    this._commands += "f" + (a === 1 ? "1" : a.toFixed(6)) + ","
+        + (b === 0 ? "0" : b.toFixed(6)) + "," + (c === 0 ? "0" : c.toFixed(6))
+        + "," + (d === 1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";";
+  };
+
+  FastContext.prototype.resetTransform = function() {
+    this.flush(true);
+    this._commands += "m;";
+  };
+
+  FastContext.prototype.scale = function(x, y) {
+    this.flush(true);
+    this._commands += "k" + x.toFixed(6) + "," + y.toFixed(6) + ";";
+  };
+
+  FastContext.prototype.rotate = function(angle) {
+    this.flush(true);
+    this._commands += "r" + angle.toFixed(6) + ";";
+  };
+
+  FastContext.prototype.translate = function(tx, ty) {
+    this.flush(true);
+    this._commands += "l" + tx + "," + ty + ";";
+  };
+
+  FastContext.prototype.save = function() {
+    this.flush(true);
+    this._commands += "v;";
+  };
+
+  FastContext.prototype.restore = function() {
+    this.flush(true);
+    this._commands += "e;";
+  };
+
+  FastContext.prototype.drawImage = function(image, sx, sy, sw, sh, dx, dy, dw,
+      dh) {
+    this.flush(true);
+
+    if (this._globalAlpha !== this.globalAlpha) {
+      this._globalAlpha = this.globalAlpha;
+      this._commands += "a" + value.toFixed(6) + ";";
+    }
+
+    if (typeof dx !== 'undefined') {
+      // all arguments, source and destination
+      this._commands += "d" + image._id + "," + sx + "," + sy + "," + sw + ","
+          + sh + "," + dx + "," + dy + "," + dw + "," + dh + ";";
+
+    } else if (typeof sw !== 'undefined') {
+      // drawImage(image, dx, dy, dw, dh); position and size (s becomes d)
+      this._commands += "d" + image._id + ",0,0," + image.width + ","
+          + image.height + "," + sx + "," + sy + "," + sw + "," + sh + ";";
+
+    } else {
+      // drawImage(image, dx, dy); position only (s becomes d)
+      this._commands += "d" + image._id + ",0,0," + image.width + ","
+          + image.height + "," + sx + "," + sy + "," + image.width + ","
+          + image.height + ";";
+    }
+  };
+
+  FastContext.prototype.capture = function(x, y, w, h, fileName, done, fail) {
+    exec(done, fail, 'capture', [ x, y, w, h, fileName ]);
+  };
+
+  FastContext.prototype.preload = function(src, done, fail) {
+    return new FastContextImage(src, done, fail);
+  };
+
+  // TODO remove this!
+  FastContext.createImage = function(src, done, fail) {
+    if (isAvailable) {
+      return new FastContextImage(src, done, fail);
+    } else {
+      var image = new Image();
+      image.onload = done;
+      image.onerror = fail;
+      image.src = src;
+      return image;
+    }
+  };
+
+  var ID = 0;
+
+  function FastContextImage(src, done, fail) {
+
+    this.width = 0;
+    this.height = 0;
+    this.id = this._id = ++ID;
+
+    var self = this;
+    exec(function(metrics) {
+      self.width = Math.floor(metrics[0]);
+      self.height = Math.floor(metrics[1]);
+      done && done();
+
+    }, function(err) {
+      fail && fail(err);
+
+    }, 'loadTexture', [ src, this._id ]);
+  }
+
+  this.FastContext = window.FastContext = FastContext;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = FastContext;
+  }
+
+}).call(this, typeof cordova !== "undefined" ? cordova : null,
+    typeof require === 'function' ? require : null);
