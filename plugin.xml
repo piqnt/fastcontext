@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-  id="com.piqnt.fastcontext" version="0.1.0">
+  id="com.piqnt.fastcontext" version="0.1.1">
 
   <name>FastContext</name>
-  <description>Android Native 2D Context for HTML5 Canvas</description>
+  <description>Native HTML5 Canvas 2D Context for Android</description>
   <license>MIT</license>
 
   <engines>

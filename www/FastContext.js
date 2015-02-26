@@ -69,16 +69,16 @@
 
   FastContext.prototype.setTransform = function(a, b, c, d, tx, ty) {
     this.flush(true);
-    this._commands += "t" + (a === 1 ? "1" : a.toFixed(6)) + ","
-        + (b === 0 ? "0" : b.toFixed(6)) + "," + (c === 0 ? "0" : c.toFixed(6))
-        + "," + (d === 1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";";
+    a = num(a), b = num(b), c = num(c), d = num(d), tx = num(tx), ty = num(ty);
+    this._commands += "t" + a + "," + b + "," + c + "," + d + "," + tx + ","
+        + ty + ";";
   };
 
   FastContext.prototype.transform = function(a, b, c, d, tx, ty) {
     this.flush(true);
-    this._commands += "f" + (a === 1 ? "1" : a.toFixed(6)) + ","
-        + (b === 0 ? "0" : b.toFixed(6)) + "," + (c === 0 ? "0" : c.toFixed(6))
-        + "," + (d === 1 ? "1" : d.toFixed(6)) + "," + tx + "," + ty + ";";
+    a = num(a), b = num(b), c = num(c), d = num(d), tx = num(tx), ty = num(ty);
+    this._commands += "f" + a + "," + b + "," + c + "," + d + "," + tx + ","
+        + ty + ";";
   };
 
   FastContext.prototype.resetTransform = function() {
@@ -88,16 +88,19 @@
 
   FastContext.prototype.scale = function(x, y) {
     this.flush(true);
-    this._commands += "k" + x.toFixed(6) + "," + y.toFixed(6) + ";";
+    x = num(x), y = num(y);
+    this._commands += "k" + x + "," + y + ";";
   };
 
-  FastContext.prototype.rotate = function(angle) {
+  FastContext.prototype.rotate = function(a) {
     this.flush(true);
-    this._commands += "r" + angle.toFixed(6) + ";";
+    a = num(a);
+    this._commands += "r" + a + ";";
   };
 
   FastContext.prototype.translate = function(tx, ty) {
     this.flush(true);
+    tx = num(tx), ty = num(ty);
     this._commands += "l" + tx + "," + ty + ";";
   };
 
@@ -117,7 +120,7 @@
 
     if (this._globalAlpha !== this.globalAlpha) {
       this._globalAlpha = this.globalAlpha;
-      this._commands += "a" + value.toFixed(6) + ";";
+      this._commands += "a" + num(this.globalAlpha) + ";";
     }
 
     if (typeof dx !== 'undefined') {
@@ -183,6 +186,10 @@
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = FastContext;
+  }
+
+  function num(x) {
+    return (x * 1000000 | 0) / 1000000;
   }
 
 }).call(this, typeof cordova !== "undefined" ? cordova : null,
