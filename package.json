@@ -1,7 +1,7 @@
 {
   "name": "fastcontext",
-  "version": "0.1.1",
-  "description": "Native HTML5 Canvas 2D Context for Android",
+  "version": "0.1.2",
+  "description": "Android Native 2D Context for HTML5 Canvas",
   "author": "Ali Shakiba",
   "license": "MIT",
   "repository": {

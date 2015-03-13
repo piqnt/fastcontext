@@ -6,7 +6,7 @@ While FastContext attempts to look and behave very similar to the standard 2D Co
 
 Unlike standard 2D Context, FastContext encompasses your entire screen and can not be integrated with other elements in the DOM. It lives outside of the DOM in a separate rendering surface and covers HTML content.
 
-FastContext is a based on Jeff Mott's [FastCanvas](https://github.com/phonegap/phonegap-plugin-fast-canvas) project, but with improved integration with HTML5 Canvas.
+FastContext is a based on Jeff Mott's [FastCanvas](https://github.com/phonegap/phonegap-plugin-fast-canvas) project, but instead of creating a Canvas element it extends Canvas prototype and transparently returns a FastContext if available and specified in second parameter of `Canvas#getContex()`.
 
 ### Installation
 
@@ -87,3 +87,8 @@ For best performance, minimize the number of draw calls per frame in the GL laye
 The renderer itself is OpenGL ES 2.0 command streams and the code is written in C++. The advantage of C++ is both portability and control of memory management.
 
 Your JS code runs in the browser thread, while most of the work FastContext does is in the Android UI thread. A tight stream of rendering commands is sent from JS to UI thread.
+
+### TODO
+
+* Send absolute (resolved) images path to load.
+* Make it possible to show/hide GLSurface.

@@ -1,4 +1,4 @@
-package com.adobe.plugins;
+package com.piqnt.fastcontext;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,42 +25,41 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-public class FastCanvasView extends GLSurfaceView {
+import com.adobe.plugins.FastCanvasJNI;
+import com.adobe.plugins.FastCanvasTextureDimension;
 
-    private FastCanvas plugin;
+public class FastContextView extends GLSurfaceView {
+
+    private FastContextPlugin plugin;
     private LinkedList<Command> queue = new LinkedList<Command>();
     private Map<Integer, Texture> textures = new HashMap<Integer, Texture>();
     private String renderCommand;
 
-    public FastCanvasView(Context context, FastCanvas plugin) {
+    public FastContextView(Context context, FastContextPlugin plugin) {
         super(context);
         this.plugin = plugin;
         this.setEGLConfigChooser(false);// turn off the depth buffer
-        this.setRenderer(new FastCanvasRenderer());
+        this.setRenderer(new FastContextRenderer());
         this.setRenderMode(RENDERMODE_CONTINUOUSLY);
 
         this.setFocusableInTouchMode(true);
         this.requestFocus();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return plugin.webView.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        return plugin.webView.onKeyUp(keyCode, event);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return plugin.webView.dispatchTouchEvent(event);
-    }
+    // @Override
+    // public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // return plugin.webView.onKeyDown(keyCode, event);
+    // }
+    // @Override
+    // public boolean onKeyUp(int keyCode, KeyEvent event) {
+    // return plugin.webView.onKeyUp(keyCode, event);
+    // }
+    // @Override
+    // public boolean onTouchEvent(MotionEvent event) {
+    // return plugin.webView.dispatchTouchEvent(event);
+    // }
 
     @Override
     public void onResume() {
@@ -93,7 +92,7 @@ public class FastCanvasView extends GLSurfaceView {
         super.surfaceDestroyed(holder);
     }
 
-    public class FastCanvasRenderer implements GLSurfaceView.Renderer {
+    public class FastContextRenderer implements GLSurfaceView.Renderer {
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Log.i(TAG, "onSurfaceCreated: " + gl + ", " + config);
@@ -149,7 +148,7 @@ public class FastCanvasView extends GLSurfaceView {
             }
         }
 
-        private static final String TAG = "FastCanvasRenderer";
+        private static final String TAG = "FastContextRenderer";
     }
 
     private void unloadTexture(int id) {
@@ -275,7 +274,7 @@ public class FastCanvasView extends GLSurfaceView {
             return dim;
         }
 
-        private static final String TAG = "FastCanvasTexture";
+        private static final String TAG = "FastContextTexture";
     }
 
     public boolean execute(String action, JSONArray args,
@@ -379,5 +378,5 @@ public class FastCanvasView extends GLSurfaceView {
         assert error == GLES10.GL_NO_ERROR;
     }
 
-    private static final String TAG = "FastCanvasView";
+    private static final String TAG = "FastContextView";
 }

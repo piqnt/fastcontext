@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-  id="com.piqnt.fastcontext" version="0.1.1">
+  id="com.piqnt.fastcontext" version="0.1.2">
 
   <name>FastContext</name>
-  <description>Native HTML5 Canvas 2D Context for Android</description>
+  <description>Android Native 2D Context for HTML5 Canvas</description>
   <license>MIT</license>
 
   <engines>
@@ -13,7 +13,7 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="FastContext">
-        <param name="android-package" value="com.adobe.plugins.FastCanvas" />
+        <param name="android-package" value="com.piqnt.fastcontext.FastContextPlugin" />
       </feature>
     </config-file>
 
@@ -25,10 +25,10 @@
       <clobbers target="FastContext" />
     </js-module>
 
-    <source-file src="Android/src/com/adobe/plugins/FastCanvas.java" target-dir="src/com/adobe/plugins/" />
+    <source-file src="Android/src/com/piqnt/fastcontext/FastContextPlugin.java" target-dir="src/com/piqnt/fastcontext/" />
+    <source-file src="Android/src/com/piqnt/fastcontext/FastContextView.java" target-dir="src/com/piqnt/fastcontext/" />
     <source-file src="Android/src/com/adobe/plugins/FastCanvasJNI.java" target-dir="src/com/adobe/plugins/" />
     <source-file src="Android/src/com/adobe/plugins/FastCanvasTextureDimension.java" target-dir="src/com/adobe/plugins/" />
-    <source-file src="Android/src/com/adobe/plugins/FastCanvasView.java" target-dir="src/com/adobe/plugins/" />
     <source-file src="Android/libs/armeabi/libFastCanvasJNI.so" target-dir="libs/armeabi/" />
   </platform>
 </plugin>
