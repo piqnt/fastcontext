@@ -64,6 +64,7 @@ FastContext API consists a subset of the standard [CanvasRenderingContext2D API]
 | context.clear() | Should be used instead of clearRect(), it clears entire Canvas. |
 | context.flush() | Flushes queued commands to native backend, called automatically at the end of each frame. |
 | context.capture(x, y, w, h, filename, onsuccess, onerror) | Saves the current state of the Context as an image. |
+| context.setBackgroundColor(color) | Set background color for context, accepts hex format. |
 | context.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh) | Supported |
 | context.globalAlpha | Supported |
 | context.resetTransform() | Supported |

@@ -145,6 +145,26 @@
     exec(done, fail, 'capture', [ x, y, w, h, fileName ]);
   };
 
+  FastContext.prototype.setBackgroundColor = function(color) {
+    if (typeof color === 'number') {
+      color = color.toString(16);
+      while (color.length < 6) {
+        color = '0' + color;
+      }
+    } else if (typeof color === 'string'
+        && (color = color.match(/(#|0x)?([0-9a-f]{6}|[0-9a-f]{3})/i))) {
+      color = color[2]
+      if (color.length === 3) {
+        color = color.charAt(0) + color.charAt(0) + color.charAt(1)
+            + color.charAt(1) + color.charAt(2) + color.charAt(2);
+      }
+    } else {
+      return false;
+    }
+    exec(null, null, 'setBackgroundColor', [ color ]);
+    return true;
+  };
+
   FastContext.prototype.preload = function(src, done, fail) {
     return new FastContextImage(src, done, fail);
   };
