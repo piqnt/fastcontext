@@ -1,3 +1,5 @@
+> FastContext is a based on [FastCanvas](https://github.com/phonegap/phonegap-plugin-fast-canvas) by [Jeff Mott](https://github.com/jmott), but instead of creating a Canvas element it extends Canvas prototype and transparently returns a FastContext if available and requested in second parameter of `Canvas#getContex()`.
+
 # FastContext
 
 FastContext is a Cordova/PhoneGap plugin for Android which replaces HTML5 2D Context with a very fast native GL rendering surface.
@@ -6,12 +8,10 @@ While FastContext attempts to look and behave very similar to the standard 2D Co
 
 Unlike standard 2D Context, FastContext encompasses your entire screen and can not be integrated with other elements in the DOM. It lives outside of the DOM in a separate rendering surface and covers HTML content.
 
-FastContext is a based on Jeff Mott's [FastCanvas](https://github.com/phonegap/phonegap-plugin-fast-canvas) project, but instead of creating a Canvas element it extends Canvas prototype and transparently returns a FastContext if available and specified in second parameter of `Canvas#getContex()`.
-
 ### Installation
 
 ```
-cordova plugin add https://github.com/piqnt/fastcontext.git
+cordova plugin add https://github.com/shakiba/fastcontext.git
 ```
 
 ### Usage
@@ -50,7 +50,7 @@ function render() {
 In addition to the code changes above, because FastContext applications are fullscreen, your HTML should also include the following meta tag to be assured that window metrics are reported accurately and consistently:
 
 ```html
-<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
+<meta name="viewport" content="user-scalable=no; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; width=device-width; height=device-height" />
 ```
 
 ### API
