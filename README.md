@@ -50,7 +50,7 @@ function render() {
 In addition to the code changes above, because FastContext applications are fullscreen, your HTML should also include the following meta tag to be assured that window metrics are reported accurately and consistently:
 
 ```html
-<meta name="viewport" content="user-scalable=no; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; width=device-width; height=device-height" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
 ```
 
 ### API
